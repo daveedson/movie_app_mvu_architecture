@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -10,8 +11,8 @@ import 'package:movie_search_app/features/search/data/entities.dart';
 import 'package:movie_search_app/features/search/data/search_movie_repository.dart';
 import 'package:movie_search_app/main.dart';
 
-
-final searchMovieRepositoryProvider = Provider<SearchMovieRepositoryImpl>((ref) {
+final searchMovieRepositoryProvider =
+    Provider<SearchMovieRepositoryImpl>((ref) {
   return SearchMovieRepositoryImpl(dio: ref.watch(dioProvider));
 });
 
@@ -25,12 +26,14 @@ class SearchMovieRepositoryImpl implements SearchMovieRepository {
     try {
       final response = await dio.get("$API_KEY&s=$value");
       if (response.statusCode == 200) {
+        log(response.data);
         Map data = jsonDecode(response.data);
         if (data['Response'] == "True") {
-          var list = (data['Search'] as List)
-              .map((item) => MovieEntity.fromJson(item))
-              .toList();
-          return list;
+          final results =
+              List<Map<String, dynamic>>.from(response.data['Search']);
+          final movies = results.map((e) => MovieEntity.fromJson(e)).toList();
+
+          return movies;
         } else {
           throw Exception(data['Error']);
         }
