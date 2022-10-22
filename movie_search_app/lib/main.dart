@@ -1,10 +1,20 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_search_app/features/search/presentation/view/search_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
+
+final dioProvider = Provider<Dio>((ref) {
+  return Dio(BaseOptions(
+    baseUrl: 'http://www.omdbapi.com/',
+  ));
+});
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
