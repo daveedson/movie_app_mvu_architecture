@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 
 class SearchScreen extends ConsumerWidget {
   @override
@@ -64,13 +65,15 @@ class SearchScreen extends ConsumerWidget {
                       hintText: 'Search'),
                 ),
               ),
-              SizedBox(height: 40.0),
-              Container(
-                height: 400.0,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              SizedBox(height: 100.0),
+              Lottie.asset("images/search.json"),
+              Text(
+                "Search for your favourite movies or shows",
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
               )
             ],
           ),
@@ -79,3 +82,12 @@ class SearchScreen extends ConsumerWidget {
     );
   }
 }
+
+
+// Container(
+//                 height: 400.0,
+//                 width: double.infinity,
+//                 decoration: BoxDecoration(
+//                     color: Colors.red,
+//                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
+//               )
