@@ -5,28 +5,30 @@ import 'package:flutter/material.dart';
 
 @immutable
 class MovieEntity extends Equatable {
-  final String movieType;
   final String movieTitle;
-  final String year;
-  final String imdbID;
-  final String movieImage;
+  final dynamic voteAverage;
+  final String overView;
+  final String? posterPath;
+  final String? backdropPath;
 
-  const MovieEntity(
-      {required this.movieType,
-      required this.movieTitle,
-      required this.year,
-      required this.imdbID,
-      required this.movieImage});
+  const MovieEntity({
+    required this.voteAverage,
+    required this.overView,
+    this.posterPath,
+    this.backdropPath,
+    required this.movieTitle,
+  });
 
   factory MovieEntity.fromJson(Map<String, dynamic> json) {
     return MovieEntity(
-        movieType:json['Type'],
-        movieTitle: json['Title'],
-        year:json['Year'],
-        imdbID: json['imdbID'],
-        movieImage:json['Poster']);
+      movieTitle: json['title'],
+      voteAverage: json["vote_average"],
+      overView: json["overview"],
+      backdropPath: json["backdrop_path"],
+      posterPath: json["poster_path"],
+    );
   }
 
   @override
-  List<Object?> get props => [movieType, movieImage, year, imdbID, movieTitle];
+  List<Object?> get props =>  [movieTitle,voteAverage,overView,posterPath,backdropPath];
 }

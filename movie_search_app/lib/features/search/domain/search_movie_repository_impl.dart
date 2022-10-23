@@ -6,38 +6,38 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_search_app/core/environment_variables.dart';
 import 'package:movie_search_app/core/failure.dart';
 import 'package:movie_search_app/features/search/data/entities.dart';
 import 'package:movie_search_app/features/search/data/search_movie_repository.dart';
 import 'package:movie_search_app/main.dart';
 
-final searchMovieRepositoryProvider =
-    Provider<SearchMovieRepositoryImpl>((ref) {
+final searchMovieRepositoryProvider = Provider<SearchMovieRepository>((ref) {
   return SearchMovieRepositoryImpl(dio: ref.watch(dioProvider));
 });
 
 class SearchMovieRepositoryImpl implements SearchMovieRepository {
   final Dio dio;
-  var API_KEY = "921c74ae";
 
   SearchMovieRepositoryImpl({required this.dio});
   @override
-  Future<List<MovieEntity>?> searchforMovies(value) async {
+  Future<List<MovieEntity>> searchforMovies(value) async {
     try {
-      final response = await dio.get("$API_KEY&s=$value");
-      if (response.statusCode == 200) {
-        log(response.data);
-        Map data = jsonDecode(response.data);
-        if (data['Response'] == "True") {
-          final results =
-              List<Map<String, dynamic>>.from(response.data['Search']);
-          final movies = results.map((e) => MovieEntity.fromJson(e)).toList();
-
-          return movies;
-        } else {
-          throw Exception(data['Error']);
-        }
-      }
+      log(value.toString());
+      final response = await dio.get(
+        'search/movie/',
+        queryParameters: {
+          'api_key': api,
+          'language': 'en-US',
+          'page': 1,
+          'query':value
+        },
+        
+      );
+      log(response.toString());
+      final results = List<Map<String, dynamic>>.from(response.data['results']);
+      final searchMovie = results.map((e) => MovieEntity.fromJson(e)).toList();
+      return searchMovie;
     } on DioError catch (e) {
       if (e.error is SocketException) {
         throw Failure(
@@ -47,10 +47,9 @@ class SearchMovieRepositoryImpl implements SearchMovieRepository {
       }
 
       throw Failure(
-        message: e.response?.statusMessage ?? 'Something went wrong',
+        message: e.response?.data["errors"],
         code: e.response?.statusCode,
       );
     }
-    return null;
   }
 }
