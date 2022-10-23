@@ -19,7 +19,7 @@ class MovieTile extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
-              image: DecorationImage(
+             image: DecorationImage(
                 image: NetworkImage(imagePath),
                 fit: BoxFit.fill,
               )),

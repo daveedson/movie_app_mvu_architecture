@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:movie_search_app/features/details/presentation/view/details_screen.dart';
 import 'package:movie_search_app/features/search/domain/search_movie_model.dart';
 import 'package:movie_search_app/features/search/presentation/controller/searchMovie_controller.dart';
 import 'package:movie_search_app/features/widgets/movietile.dart';
@@ -133,9 +134,25 @@ class SearchScreen extends ConsumerWidget {
                                   shrinkWrap: true,
                                   itemBuilder: (context, index) {
                                     final movies = data[index];
-                                    return MovieTile(
-                                      rating: movies.voteAverage.toString(),
-                                      imagePath: movies.posterPath!,
+                                    
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: ((context) =>
+                                                DetailsScreen(
+                                                    movies.posterPath!,movies.overView,movies.voteAverage)),
+                                          ),
+                                        );
+                                      },
+                                      child: Hero(
+                                        tag: 'tagImage$index',
+                                        child: MovieTile(
+                                          rating: movies.voteAverage.toString(),
+                                          imagePath: movies.posterPath!,
+                                        ),
+                                      ),
                                     );
                                   },
                                   separatorBuilder:
@@ -151,7 +168,20 @@ class SearchScreen extends ConsumerWidget {
         error: (e, error) => Scaffold(
               backgroundColor: Color(0xFFFEF9F3),
               body: Center(
-                child: Lottie.asset("images/somethingerror.json"),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset("images/somethingerror.json"),
+                    Text(
+                      "Something went wrong please try again",
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    )
+                  ],
+                ),
               ),
             ));
   }
