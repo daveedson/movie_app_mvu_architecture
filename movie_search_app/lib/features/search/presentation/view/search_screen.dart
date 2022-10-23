@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
-import 'package:movie_search_app/features/details/presentation/view/details_screen.dart';
+import 'package:movie_search_app/features/search/presentation/view/details_screen.dart';
 import 'package:movie_search_app/features/search/domain/search_movie_model.dart';
 import 'package:movie_search_app/features/search/presentation/controller/searchMovie_controller.dart';
 import 'package:movie_search_app/features/widgets/movietile.dart';

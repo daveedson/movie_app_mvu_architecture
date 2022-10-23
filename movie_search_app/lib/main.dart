@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:movie_search_app/features/details/presentation/view/details_screen.dart';
+import 'package:movie_search_app/features/search/presentation/view/details_screen.dart';
 import 'package:movie_search_app/features/search/presentation/view/search_screen.dart';
 
 void main() {
