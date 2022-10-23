@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 import 'package:movie_search_app/features/search/domain/search_movie_model.dart';
 import 'package:movie_search_app/features/search/presentation/controller/searchMovie_controller.dart';
@@ -69,12 +70,23 @@ class SearchScreen extends ConsumerWidget {
                                       .watch(searchMovieControllerProvider)
                                       .textEditingController
                                       .text;
-                                  ref
-                                      .watch(searchMovieControllerProvider
-                                          .notifier)
-                                      .searchMovies(searchText);
-                                  SystemChannels.textInput
-                                      .invokeMethod('TextInput.hide');
+                                  if (searchText.isEmpty) {
+                                    Fluttertoast.showToast(
+                                        msg: "Please type in a movie",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.black45,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  } else {
+                                    ref
+                                        .watch(searchMovieControllerProvider
+                                            .notifier)
+                                        .searchMovies(searchText);
+                                    SystemChannels.textInput
+                                        .invokeMethod('TextInput.hide');
+                                  }
                                 },
                               ),
                               border: OutlineInputBorder(
@@ -100,24 +112,37 @@ class SearchScreen extends ConsumerWidget {
                               hintText: 'Search'),
                         ),
                       ),
-                      SizedBox(height: 100.0),
-                    data.isEmpty?  Expanded(
-                          child: Column(
-                        children: [
-                          Lottie.asset("images/search.json"),
-                          Text(
-                            "Search for your favourite movies or shows",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      )):Center(),
-                      // MovieTile(
-                      //   rating: "5.0",
-                      // ),
+                      SizedBox(height: 10.0),
+                      data.isEmpty
+                          ? Expanded(
+                              child: Column(
+                              children: [
+                                Lottie.asset("images/search.json"),
+                                Text(
+                                  "Search for your favourite movies or shows",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
+                                )
+                              ],
+                            ))
+                          : Expanded(
+                              child: ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    final movies = data[index];
+                                    return MovieTile(
+                                      rating: movies.voteAverage.toString(),
+                                      imagePath: movies.posterPath!,
+                                    );
+                                  },
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const Divider(),
+                                  itemCount: data.length),
+                            ),
                     ],
                   ),
                 ),

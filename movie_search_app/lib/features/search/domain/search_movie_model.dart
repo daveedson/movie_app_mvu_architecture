@@ -20,7 +20,7 @@ class MovieModel {
         movieTitle: movies.movieTitle,
         overView: movies.overView,
         voteAverage: movies.voteAverage,
-        backdropPath: movies.backdropPath,
-        posterPath: movies.posterPath);
+        backdropPath:  'https://image.tmdb.org/t/p/original/${movies.backdropPath}',
+        posterPath: 'https://image.tmdb.org/t/p/original/${movies.posterPath}');
   }
 }

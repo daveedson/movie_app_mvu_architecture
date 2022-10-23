@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class MovieTile extends StatelessWidget {
   final String rating;
+  final String imagePath;
 
-  const MovieTile({super.key, required this.rating});
+  const MovieTile({super.key, required this.rating, required this.imagePath});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -15,12 +16,11 @@ class MovieTile extends StatelessWidget {
           height: 400.0,
           width: double.infinity,
           decoration: BoxDecoration(
-              color: Colors.red,
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
               image: DecorationImage(
-                image: AssetImage("images/venom.jpg"),
+                image: NetworkImage(imagePath),
                 fit: BoxFit.fill,
               )),
         ),
